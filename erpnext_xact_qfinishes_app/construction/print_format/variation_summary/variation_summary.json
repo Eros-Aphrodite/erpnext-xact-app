@@ -1,0 +1,10 @@
+{
+ "doc_type": "Variation",
+ "doctype": "Print Format",
+ "name": "Variation Summary",
+ "standard": "Yes",
+ "custom_format": 1,
+ "print_format_type": "Jinja",
+ "module": "Construction",
+ "html": "<div class=\"print-format\">\n<h3 class=\"text-center\">Variation / Change Order</h3>\n<p><b>{{ _(\"Variation\") }}:</b> {{ doc.name }}<br>\n<b>{{ _(\"Title\") }}:</b> {{ doc.title or \"\" }}<br>\n<b>{{ _(\"Date\") }}:</b> {{ doc.get_formatted(\"transaction_date\") }}<br>\n<b>{{ _(\"Status\") }}:</b> {{ doc.status }}<br>\n<b>{{ _(\"Project\") }}:</b> {{ doc.project or \"\" }}<br>\n<b>{{ _(\"Original Quotation\") }}:</b> {{ doc.quotation or \"\" }}<br>\n<b>{{ _(\"Sales Order\") }}:</b> {{ doc.sales_order or \"\" }}</p>\n<hr>\n<table class=\"table table-bordered\">\n<thead><tr>\n<th>{{ _(\"Cost Code\") }}</th>\n<th>{{ _(\"Item\") }}</th>\n<th>{{ _(\"Description\") }}</th>\n<th class=\"text-right\">{{ _(\"Qty\") }}</th>\n<th class=\"text-right\">{{ _(\"Rate\") }}</th>\n<th class=\"text-right\">{{ _(\"Amount\") }}</th>\n</tr></thead>\n<tbody>\n{% for row in doc.items %}\n<tr>\n<td>{{ row.cost_code or \"\" }}</td>\n<td>{{ row.item_code or row.item or \"\" }}</td>\n<td>{{ row.description or \"\" }}</td>\n<td class=\"text-right\">{{ row.quantity }}</td>\n<td class=\"text-right\">{{ row.get_formatted(\"rate\", doc) }}</td>\n<td class=\"text-right\">{{ row.get_formatted(\"amount\", doc) }}</td>\n</tr>\n{% endfor %}\n</tbody>\n</table>\n<p class=\"text-right\"><b>{{ _(\"Total Amount\") }}:</b> {{ doc.get_formatted(\"total_amount\") }}</p>\n{% if doc.sales_order_ref %}\n<p><b>{{ _(\"Change Order\") }}:</b> {{ doc.sales_order_ref }}</p>\n{% endif %}\n</div>"
+}

@@ -1,0 +1,34 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series", "project", "quotation", "sales_order", "title", "transaction_date",
+  "status", "items_section", "items", "total_amount", "sales_order_ref"
+ ],
+ "fields": [
+  {"default": "VAR-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "VAR-.YYYY.-"},
+  {"fieldname": "project", "fieldtype": "Link", "label": "Project", "options": "Project"},
+  {"fieldname": "quotation", "fieldtype": "Link", "label": "Original Quotation", "options": "Quotation"},
+  {"fieldname": "sales_order", "fieldtype": "Link", "label": "Sales Order", "options": "Sales Order"},
+  {"fieldname": "title", "fieldtype": "Data", "label": "Variation Title"},
+  {"default": "Today", "fieldname": "transaction_date", "fieldtype": "Date", "label": "Date"},
+  {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Draft\nSubmitted\nApproved\nRejected", "default": "Draft"},
+  {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Variation Lines"},
+  {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Variation Item"},
+  {"fieldname": "total_amount", "fieldtype": "Currency", "label": "Total Amount", "read_only": 1},
+  {"fieldname": "sales_order_ref", "fieldtype": "Link", "label": "Change Order (Sales Order)", "options": "Sales Order", "read_only": 1}
+ ],
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Variation",
+ "naming_series": "VAR-.YYYY.-",
+ "owner": "Administrator",
+ "permissions": [{"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "submit": 1, "write": 1}],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

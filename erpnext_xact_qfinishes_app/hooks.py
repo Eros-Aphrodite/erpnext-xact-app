@@ -8,18 +8,18 @@ app_license = "mit"
 # Apps
 # ------------------
 
-# required_apps = []
+required_apps = ["erpnext"]
 
-# Each item in the list will be shown as an app in the apps page
-# add_to_apps_screen = [
-# 	{
-# 		"name": "erpnext_xact_qfinishes_app",
-# 		"logo": "/assets/erpnext_xact_qfinishes_app/logo.png",
-# 		"title": "Erpnext Xact Qfinishes App",
-# 		"route": "/erpnext_xact_qfinishes_app",
-# 		"has_permission": "erpnext_xact_qfinishes_app.api.permission.has_app_permission"
-# 	}
-# ]
+# Show this app on the "Select an app to continue" dashboard
+add_to_apps_screen = [
+	{
+		"name": "erpnext_xact_qfinishes_app",
+		"logo": "/assets/erpnext_xact_qfinishes_app/images/qfinishes-buildxact-icon.png",
+		"title": "Construction (Buildxact)",
+		"route": "/app/construction",
+		"description": "Estimates, assemblies, cost codes, variations.",
+	}
+]
 
 # Includes in <head>
 # ------------------

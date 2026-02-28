@@ -1,0 +1,24 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["item", "description", "qty_per_unit", "uom", "cost_code"],
+ "fields": [
+  {"fieldname": "item", "fieldtype": "Link", "label": "Item", "options": "Item", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "description", "fieldtype": "Data", "label": "Description", "in_list_view": 1},
+  {"fieldname": "qty_per_unit", "fieldtype": "Float", "label": "Qty per Unit", "default": "1", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM", "in_list_view": 1},
+  {"fieldname": "cost_code", "fieldtype": "Link", "label": "Cost Code", "options": "Cost Code"}
+ ],
+ "istable": 1,
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Assembly Template Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "idx",
+ "sort_order": "ASC"
+}

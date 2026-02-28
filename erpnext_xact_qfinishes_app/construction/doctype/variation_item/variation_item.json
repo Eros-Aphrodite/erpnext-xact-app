@@ -1,0 +1,27 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["cost_code", "item", "description", "quantity", "uom", "rate", "amount", "approved"],
+ "fields": [
+  {"fieldname": "cost_code", "fieldtype": "Link", "label": "Cost Code", "options": "Cost Code", "in_list_view": 1},
+  {"fieldname": "item", "fieldtype": "Link", "label": "Item", "options": "Item", "in_list_view": 1},
+  {"fieldname": "description", "fieldtype": "Small Text", "label": "Description"},
+  {"fieldname": "quantity", "fieldtype": "Float", "label": "Quantity", "default": "1", "in_list_view": 1},
+  {"fieldname": "uom", "fieldtype": "Link", "label": "UOM", "options": "UOM"},
+  {"fieldname": "rate", "fieldtype": "Currency", "label": "Rate", "in_list_view": 1},
+  {"fieldname": "amount", "fieldtype": "Currency", "label": "Amount", "read_only": 1, "in_list_view": 1},
+  {"fieldname": "approved", "fieldtype": "Check", "label": "Approved", "default": "0"}
+ ],
+ "istable": 1,
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Variation Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "idx",
+ "sort_order": "ASC"
+}

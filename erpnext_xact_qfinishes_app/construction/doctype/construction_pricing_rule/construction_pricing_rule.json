@@ -1,0 +1,30 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "field:title",
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "title", "enabled", "cost_code", "trade", "margin_percent", "allowance_percent",
+  "applicable_from", "applicable_to"
+ ],
+ "fields": [
+  {"fieldname": "title", "fieldtype": "Data", "label": "Rule Name", "reqd": 1},
+  {"default": "1", "fieldname": "enabled", "fieldtype": "Check", "label": "Enabled"},
+  {"fieldname": "cost_code", "fieldtype": "Link", "label": "Cost Code", "options": "Cost Code", "description": "Leave blank to apply by trade only."},
+  {"fieldname": "trade", "fieldtype": "Data", "label": "Trade", "description": "E.g. Carpentry. Leave blank to apply to all."},
+  {"fieldname": "margin_percent", "fieldtype": "Percent", "label": "Margin %", "default": "0"},
+  {"fieldname": "allowance_percent", "fieldtype": "Percent", "label": "Allowance / Contingency %", "default": "0"},
+  {"fieldname": "applicable_from", "fieldtype": "Date", "label": "Applicable From"},
+  {"fieldname": "applicable_to", "fieldtype": "Date", "label": "Applicable To"}
+ ],
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Construction Pricing Rule",
+ "owner": "Administrator",
+ "permissions": [{"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}],
+ "sort_field": "title",
+ "sort_order": "ASC"
+}

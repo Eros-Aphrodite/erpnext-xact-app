@@ -1,0 +1,126 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section",
+  "cost_code",
+  "assembly_template",
+  "item",
+  "description",
+  "length",
+  "width",
+  "height",
+  "qty_expression",
+  "quantity",
+  "uom",
+  "cost",
+  "rate",
+  "amount",
+  "include_in_quotation"
+ ],
+ "fields": [
+  {
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "label": "Section / Area",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "cost_code",
+   "fieldtype": "Link",
+   "label": "Cost Code",
+   "options": "Cost Code",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "assembly_template",
+   "fieldtype": "Link",
+   "label": "Assembly Template",
+   "options": "Assembly Template"
+  },
+  {
+   "fieldname": "item",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item",
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "Length",
+   "description": "Measurement for formula (e.g. metres)."
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "Width"
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Float",
+   "label": "Height"
+  },
+  {
+   "fieldname": "cost",
+   "fieldtype": "Currency",
+   "label": "Cost",
+   "description": "Base cost for margin. Fetched from Item if blank."
+  },
+  {
+   "fieldname": "qty_expression",
+   "fieldtype": "Data",
+   "label": "Qty Expression",
+   "description": "e.g. length * width or 2 * length * height. Use Calculate Quantities."
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity",
+   "default": "1",
+   "reqd": 1,
+   "in_list_view": 1
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "UOM",
+   "options": "UOM"
+  },
+  {
+   "fieldname": "rate",
+   "fieldtype": "Currency",
+   "label": "Rate"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "read_only": 1,
+   "in_list_view": 1
+  },
+  {
+   "default": "1",
+   "fieldname": "include_in_quotation",
+   "fieldtype": "Check",
+   "label": "Include in Quotation"
+  }
+ ],
+ "istable": 1,
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Construction Estimate Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "idx",
+ "sort_order": "ASC"
+}

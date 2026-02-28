@@ -1,0 +1,43 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"header_main\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h3\\\"><b>Construction (Buildxact)</b></span><br><span class=\\\"text-muted\\\">Estimates, assemblies, cost codes, variations, job costing</span>\",\"col\":12}},{\"id\":\"shortcuts\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Construction Estimate\",\"col\":3}},{\"id\":\"shortcuts2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Assembly Template\",\"col\":3}},{\"id\":\"shortcuts3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cost Code\",\"col\":3}},{\"id\":\"shortcuts4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Variation\",\"col\":3}}]",
+ "creation": "2026-02-28 00:00:00.000000",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "file-alt",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Construction",
+ "links": [
+  {"hidden": 0, "is_query_report": 0, "label": "Estimating", "link_count": 2, "onboard": 0, "type": "Card Break"},
+  {"dependencies": "", "hidden": 0, "is_query_report": 0, "label": "Construction Estimate", "link_count": 0, "link_to": "Construction Estimate", "link_type": "DocType", "onboard": 1, "type": "Link"},
+  {"dependencies": "", "hidden": 0, "is_query_report": 0, "label": "Assembly Template", "link_count": 0, "link_to": "Assembly Template", "link_type": "DocType", "onboard": 0, "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Masters", "link_count": 2, "onboard": 0, "type": "Card Break"},
+  {"dependencies": "", "hidden": 0, "is_query_report": 0, "label": "Cost Code", "link_count": 0, "link_to": "Cost Code", "link_type": "DocType", "onboard": 0, "type": "Link"},
+  {"dependencies": "", "hidden": 0, "is_query_report": 0, "label": "Construction Pricing Rule", "link_count": 0, "link_to": "Construction Pricing Rule", "link_type": "DocType", "onboard": 0, "type": "Link"},
+  {"hidden": 0, "is_query_report": 0, "label": "Variations", "link_count": 1, "onboard": 0, "type": "Card Break"},
+  {"dependencies": "", "hidden": 0, "is_query_report": 0, "label": "Variation", "link_count": 0, "link_to": "Variation", "link_type": "DocType", "onboard": 0, "type": "Link"}
+ ],
+ "modified": "2026-02-28 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Construction",
+ "name": "construction",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "restrict_to_domain": "",
+ "roles": [],
+ "sequence_id": 1,
+ "shortcuts": [
+  {"color": "Blue", "doc_view": "List", "label": "Construction Estimate", "link_to": "Construction Estimate", "type": "DocType"},
+  {"color": "Green", "doc_view": "List", "label": "Assembly Template", "link_to": "Assembly Template", "type": "DocType"},
+  {"color": "Grey", "doc_view": "List", "label": "Cost Code", "link_to": "Cost Code", "type": "DocType"},
+  {"color": "Orange", "doc_view": "List", "label": "Variation", "link_to": "Variation", "type": "DocType"}
+ ],
+ "title": "Construction"
+}

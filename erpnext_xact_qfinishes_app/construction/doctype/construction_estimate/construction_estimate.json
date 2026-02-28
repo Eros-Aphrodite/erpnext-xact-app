@@ -1,0 +1,38 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series", "customer", "project", "title", "transaction_date", "company", "currency",
+  "status", "items_section", "items", "totals_section", "total_qty", "total_amount",
+  "quotation_ref"
+ ],
+ "fields": [
+  {"default": "EST-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "EST-.YYYY.-"},
+  {"fieldname": "customer", "fieldtype": "Link", "label": "Customer", "options": "Customer", "reqd": 1},
+  {"fieldname": "project", "fieldtype": "Link", "label": "Project", "options": "Project"},
+  {"fieldname": "title", "fieldtype": "Data", "label": "Title", "description": "Short description of the job (e.g. Bathroom Renovation)."},
+  {"default": "Today", "fieldname": "transaction_date", "fieldtype": "Date", "label": "Estimate Date"},
+  {"fieldname": "company", "fieldtype": "Link", "label": "Company", "options": "Company"},
+  {"fieldname": "currency", "fieldtype": "Link", "label": "Currency", "options": "Currency"},
+  {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Draft\nQuoted\nWon\nLost", "default": "Draft", "read_only": 1},
+  {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Estimate Lines"},
+  {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Construction Estimate Item"},
+  {"fieldname": "totals_section", "fieldtype": "Section Break", "label": "Totals"},
+  {"fieldname": "total_qty", "fieldtype": "Float", "label": "Total Quantity", "read_only": 1},
+  {"fieldname": "total_amount", "fieldtype": "Currency", "label": "Total Amount", "read_only": 1},
+  {"fieldname": "quotation_ref", "fieldtype": "Link", "label": "Quotation", "options": "Quotation", "read_only": 1}
+ ],
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Construction Estimate",
+ "naming_series": "EST-.YYYY.-",
+ "owner": "Administrator",
+ "permissions": [{"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

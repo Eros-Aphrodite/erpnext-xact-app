@@ -1,6 +1,16 @@
 ### Erpnext Xact Qfinishes App
 
-This app is designed to fully implement the functionality of XACT in ERPNext.
+This app is designed to fully implement the functionality of XACT (Buildxact-style) in ERPNext.
+
+### Construction module (Buildxact-style)
+
+- **Cost Code** – Trade / cost code masters for estimates and job costing.
+- **Assembly Template** – Reusable packs of materials (and labour) with qty-per-unit; expand into estimate lines.
+- **Construction Estimate** – Takeoff with sections, cost codes, quantities, rates. **Create Quotation** builds an ERPNext Quotation from selected lines.
+- **Variation** – Change orders: delta lines linked to Project/Quotation/Sales Order; **Create Change Order** creates a Sales Order.
+- **Construction Pricing Rule** – Margin % and allowance % by cost code / trade (for future rate building).
+
+Workflow: **Estimate** → Create **Quotation** → (convert to **Sales Order** in ERPNext) → **Variation** → Create **Change Order** (Sales Order). Use **Cost Code** and **Assembly Template** on estimates and variations.
 
 ### Installation
 
@@ -9,8 +19,18 @@ You can install this app using the [bench](https://github.com/frappe/bench) CLI:
 ```bash
 cd $PATH_TO_YOUR_BENCH
 bench get-app $URL_OF_THIS_REPO --branch develop
-bench install-app erpnext_xact_qfinishes_app
+bench --site YOUR_SITE install-app erpnext_xact_qfinishes_app
 ```
+
+If the app is already in `apps/` (e.g. you created it with `bench new-app`), ensure **bench start** (or your Redis/server services) is running, then:
+
+```bash
+bench --site YOUR_SITE install-app erpnext_xact_qfinishes_app
+# If you see "Duplicate entry" for Module Def, run migrate instead:
+bench --site YOUR_SITE migrate
+```
+
+Then open the **Construction** workspace from the Desk.
 
 ### Contributing
 
