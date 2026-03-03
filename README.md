@@ -2,6 +2,16 @@
 
 This app is designed to fully implement the functionality of XACT (Buildxact-style) in ERPNext.
 
+### Goals
+
+- Provide a **Buildxact-style construction workflow** inside ERPNext for quoting and job costing
+- Standardize estimating using **Cost Codes** and reusable **Assemblies** (template packs)
+- Turn estimates into standard ERPNext documents:
+  - **Construction Estimate → Quotation**
+  - Variations / change orders → **Sales Order**
+- Support ongoing project changes with **Variations** and traceable change order creation
+- Keep estimation structure consistent across teams (sections, cost codes, quantities, rates, margins/allowances)
+
 ### Construction module (Buildxact-style)
 
 - **Cost Code** – Trade / cost code masters for estimates and job costing.
