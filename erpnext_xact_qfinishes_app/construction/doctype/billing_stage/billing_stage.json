@@ -1,0 +1,53 @@
+{
+  "actions": [],
+  "allow_rename": 0,
+  "creation": "2026-02-27 00:00:00.000000",
+  "doctype": "DocType",
+  "editable_grid": 1,
+  "engine": "InnoDB",
+  "field_order": [
+    "stage_name",
+    "percent",
+    "invoiced",
+    "sales_invoice"
+  ],
+  "fields": [
+    {
+      "fieldname": "stage_name",
+      "fieldtype": "Data",
+      "label": "Stage Name",
+      "in_list_view": 1,
+      "reqd": 1
+    },
+    {
+      "fieldname": "percent",
+      "fieldtype": "Percent",
+      "label": "Percent of Contract",
+      "in_list_view": 1,
+      "reqd": 1
+    },
+    {
+      "default": "0",
+      "fieldname": "invoiced",
+      "fieldtype": "Check",
+      "label": "Invoiced",
+      "in_list_view": 1,
+      "read_only": 1
+    },
+    {
+      "fieldname": "sales_invoice",
+      "fieldtype": "Link",
+      "label": "Sales Invoice",
+      "options": "Sales Invoice",
+      "read_only": 1
+    }
+  ],
+  "istable": 1,
+  "modified": "2026-02-27 00:00:00.000000",
+  "module": "Construction",
+  "name": "Billing Stage",
+  "owner": "Administrator",
+  "permissions": [],
+  "sort_field": "idx",
+  "sort_order": "ASC"
+}

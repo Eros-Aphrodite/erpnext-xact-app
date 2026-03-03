@@ -1,0 +1,186 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("My Jobs") }}{% endblock %}
+
+{% block page_content %}
+<div class="container py-4 py-md-5">
+	<h1 class="mb-3 mb-md-4">{{ _("My Jobs") }}</h1>
+
+	{% if no_customer %}
+		<p class="text-muted">{{ _("Your account is not linked to any customer. Please contact your builder.") }}</p>
+		<p><a href="/me">{{ _("Back to account") }}</a></p>
+	{% elif not jobs %}
+		<p class="text-muted">{{ _("You have no jobs with a contract yet.") }}</p>
+		<p><a href="/me">{{ _("Back to account") }}</a></p>
+	{% else %}
+		<div class="list-group">
+			{% for job in jobs %}
+			<div class="list-group-item list-group-item-action flex-column align-items-start mb-3 rounded border">
+				<div class="d-flex w-100 justify-content-between">
+					<h5 class="mb-2">{{ job.project_name }}</h5>
+					<small class="text-muted">{{ job.project }}</small>
+				</div>
+				<div class="row text-muted small mb-2">
+					<div class="col-md-3">
+						<strong>{{ _("Contract value") }}</strong>: {{ frappe.format_value(job.contract_value, "Currency", job.currency) }}
+					</div>
+					<div class="col-md-3">
+						<strong>{{ _("Invoiced") }}</strong>: {{ frappe.format_value(job.progress_invoiced, "Currency", job.currency) }}
+					</div>
+					<div class="col-md-3">
+						<strong>{{ _("Remaining to bill") }}</strong>: {{ frappe.format_value(job.remaining_to_bill, "Currency", job.currency) }}
+					</div>
+					<div class="col-md-3">
+						<strong>{{ _("Progress") }}</strong>: {{ job.percent_invoiced }}%
+					</div>
+				</div>
+				{% if job.invoices %}
+				<div class="mt-2">
+					<strong>{{ _("Invoices") }}</strong>
+					<div class="table-responsive">
+					<table class="table table-sm table-borderless mb-0 mt-1">
+						<thead>
+							<tr>
+								<th>{{ _("Invoice") }}</th>
+								<th>{{ _("Date") }}</th>
+								<th>{{ _("Amount") }}</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for inv in job.invoices %}
+							<tr>
+								<td>{{ inv.name }}</td>
+								<td>{{ frappe.utils.formatdate(inv.posting_date) }}</td>
+								<td>{{ frappe.format_value(inv.grand_total, "Currency", job.currency) }}</td>
+								<td>
+									<a href="/order?doctype=Sales Invoice&name={{ inv.name }}" class="btn btn-sm btn-outline-primary">{{ _("View") }}</a>
+									<a href="/printview?doctype=Sales Invoice&name={{ inv.name }}&format=Standard" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-secondary">{{ _("Print") }}</a>
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</div>
+				</div>
+				{% endif %}
+				{% if job.variations %}
+				<div class="mt-3">
+					<strong>{{ _("Variations") }}</strong>
+					<div class="table-responsive">
+					<table class="table table-sm table-borderless mb-0 mt-1">
+						<thead>
+							<tr>
+								<th>{{ _("Variation") }}</th>
+								<th>{{ _("Title") }}</th>
+								<th>{{ _("Date") }}</th>
+								<th>{{ _("Amount") }}</th>
+								<th>{{ _("Client status") }}</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for var in job.variations %}
+							<tr data-variation="{{ var.name }}">
+								<td>{{ var.name }}</td>
+								<td>{{ var.title or "—" }}</td>
+								<td>{{ frappe.utils.formatdate(var.transaction_date) if var.transaction_date else "—" }}</td>
+								<td>{{ frappe.format_value(var.total_amount, "Currency", job.currency) }}</td>
+								<td>
+									<span class="badge badge-{% if var.client_approval_status == 'Approved' %}success{% elif var.client_approval_status == 'Rejected' %}danger{% else %}secondary{% endif %}">
+										{{ var.client_approval_status or _("Pending") }}
+									</span>
+								</td>
+								<td>
+									{% if (var.client_approval_status or '').lower() != 'approved' and (var.client_approval_status or '').lower() != 'rejected' %}
+									<button type="button" class="btn btn-sm btn-success variation-approve" data-name="{{ var.name }}">{{ _("Approve") }}</button>
+									<button type="button" class="btn btn-sm btn-danger variation-reject" data-name="{{ var.name }}">{{ _("Reject") }}</button>
+									{% endif %}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</div>
+				</div>
+				{% endif %}
+				{% if job.job_documents %}
+				<div class="mt-3">
+					<strong>{{ _("Documents") }}</strong>
+					<div class="table-responsive">
+					<table class="table table-sm table-borderless mb-0 mt-1">
+						<thead>
+							<tr>
+								<th>{{ _("Title") }}</th>
+								<th>{{ _("Category") }}</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for doc in job.job_documents %}
+							<tr>
+								<td>{{ doc.title or doc.name }}</td>
+								<td><span class="badge badge-secondary">{{ doc.category or _("Other") }}</span></td>
+								<td>
+									{% if doc.file %}
+									<a href="{{ doc.file }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">{{ _("View") }}</a>
+									{% endif %}
+								</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+					</div>
+				</div>
+				{% endif %}
+			</div>
+			{% endfor %}
+		</div>
+		<p class="mt-3"><a href="/me">{{ _("Back to account") }}</a></p>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+(function() {
+	var setApproval = function(action, variationName, comment) {
+		var form = new FormData();
+		form.append('cmd', 'erpnext_xact_qfinishes_app.construction.doctype.variation.variation.set_client_approval');
+		form.append('variation_name', variationName);
+		form.append('action', action);
+		if (comment) form.append('comment', comment);
+		var token = document.querySelector('meta[name="csrf-token"]') && document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+		var params = { variation_name: variationName, action: action, comment: comment || '' };
+		return fetch('/api/method/erpnext_xact_qfinishes_app.construction.doctype.variation.variation.set_client_approval', {
+			method: 'POST',
+			headers: token ? { 'X-Frappe-CSRF-Token': token } : {},
+			body: new URLSearchParams(params),
+			credentials: 'same-origin'
+		}).then(function(r) { return r.json(); });
+	};
+	document.addEventListener('DOMContentLoaded', function() {
+		document.querySelectorAll('.variation-approve').forEach(function(btn) {
+			btn.addEventListener('click', function() {
+				var name = this.getAttribute('data-name');
+				var comment = window.prompt('Add a comment (optional):') || '';
+				setApproval('Approved', name, comment).then(function(res) {
+					if (res.exc) { alert(res._server_messages ? JSON.parse(res._server_messages).join(' ') : 'Error'); return; }
+					window.location.reload();
+				}).catch(function() { alert('Request failed'); });
+			});
+		});
+		document.querySelectorAll('.variation-reject').forEach(function(btn) {
+			btn.addEventListener('click', function() {
+				var name = this.getAttribute('data-name');
+				var comment = window.prompt('Reason (optional):') || '';
+				setApproval('Rejected', name, comment).then(function(res) {
+					if (res.exc) { alert(res._server_messages ? JSON.parse(res._server_messages).join(' ') : 'Error'); return; }
+					window.location.reload();
+				}).catch(function() { alert('Request failed'); });
+			});
+		});
+	});
+})();
+</script>
+{% endblock %}

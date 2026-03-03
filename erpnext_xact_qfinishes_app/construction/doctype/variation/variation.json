@@ -8,7 +8,8 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series", "project", "quotation", "sales_order", "title", "transaction_date",
-  "status", "items_section", "items", "total_amount", "sales_order_ref"
+  "status", "client_approval_section", "client_approval_status", "client_approved_date", "client_comment",
+  "items_section", "items", "total_amount", "sales_order_ref"
  ],
  "fields": [
   {"default": "VAR-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "VAR-.YYYY.-"},
@@ -18,6 +19,10 @@
   {"fieldname": "title", "fieldtype": "Data", "label": "Variation Title"},
   {"default": "Today", "fieldname": "transaction_date", "fieldtype": "Date", "label": "Date"},
   {"fieldname": "status", "fieldtype": "Select", "label": "Status", "options": "Draft\nSubmitted\nApproved\nRejected", "default": "Draft"},
+  {"fieldname": "client_approval_section", "fieldtype": "Section Break", "label": "Client Approval"},
+  {"fieldname": "client_approval_status", "fieldtype": "Select", "label": "Client Approval Status", "options": "Pending\nApproved\nRejected", "default": "Pending", "read_only": 1, "description": "Set by client from portal (My Jobs)."},
+  {"fieldname": "client_approved_date", "fieldtype": "Datetime", "label": "Client Approved / Rejected On", "read_only": 1},
+  {"fieldname": "client_comment", "fieldtype": "Small Text", "label": "Client Comment", "read_only": 1},
   {"fieldname": "items_section", "fieldtype": "Section Break", "label": "Variation Lines"},
   {"fieldname": "items", "fieldtype": "Table", "label": "Items", "options": "Variation Item"},
   {"fieldname": "total_amount", "fieldtype": "Currency", "label": "Total Amount", "read_only": 1},

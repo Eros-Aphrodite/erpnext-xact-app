@@ -4,4 +4,8 @@
 
 [post_model_sync]
 erpnext_xact_qfinishes_app.patches.v1_0.create_variation_workflow
+erpnext_xact_qfinishes_app.patches.v1_0.add_cost_code_to_purchasing_and_timesheets
+erpnext_xact_qfinishes_app.patches.v1_0.add_construction_estimate_on_purchase_order
+erpnext_xact_qfinishes_app.patches.v1_0.add_construction_lead_on_estimate
+erpnext_xact_qfinishes_app.patches.v1_0.add_deputy_timesheet_id
 # Patches added in this section will be executed after doctypes are migrated

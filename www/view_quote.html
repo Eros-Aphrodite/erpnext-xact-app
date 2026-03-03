@@ -1,0 +1,93 @@
+{% extends "templates/web.html" %}
+
+{% block title %}{{ _("View Quote") }}{% endblock %}
+
+{% block page_content %}
+<div class="container py-5">
+	{% if not valid %}
+		<h1 class="mb-4">{{ _("Quote") }}</h1>
+		<p class="text-danger">{{ error or _("Invalid or expired link.") }}</p>
+		<p><a href="/">{{ _("Go to homepage") }}</a></p>
+	{% else %}
+		<h1 class="mb-4">{{ estimate.title or estimate.name }}</h1>
+		<p class="text-muted">{{ _("Quote") }}: {{ estimate.name }} &middot; {{ frappe.utils.formatdate(estimate.transaction_date) if estimate.transaction_date else "" }}</p>
+		<div class="card mb-4">
+			<div class="card-body">
+				<div class="table-responsive">
+				<table class="table table-sm">
+					<thead>
+						<tr>
+							<th>{{ _("Item / Description") }}</th>
+							<th class="text-right">{{ _("Qty") }}</th>
+							<th class="text-right">{{ _("Rate") }}</th>
+							<th class="text-right">{{ _("Amount") }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for row in estimate.items or [] %}
+						<tr>
+							<td>{{ row.description or row.item or "—" }}</td>
+							<td class="text-right">{{ row.quantity }}</td>
+							<td class="text-right">{{ frappe.format_value(row.rate, "Currency", currency) }}</td>
+							<td class="text-right">{{ frappe.format_value(row.amount, "Currency", currency) }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				</div>
+				<div class="text-right mt-2">
+					<strong>{{ _("Total") }}: {{ frappe.format_value(estimate.total_amount, "Currency", currency) }}</strong>
+				</div>
+			</div>
+		</div>
+		<p class="mb-3">
+			<a href="/printview?doctype=Construction Estimate&name={{ estimate.name }}&key={{ key }}&format=Standard" target="_blank" rel="noopener noreferrer" class="btn btn-outline-secondary">{{ _("Print / PDF") }}</a>
+		</p>
+		{% if already_accepted %}
+			<p class="text-success">{{ _("This quote has been accepted.") }}</p>
+		{% else %}
+			<button type="button" class="btn btn-primary" id="accept-quote-btn">{{ _("Accept quote") }}</button>
+			<p id="accept-message" class="mt-2 small text-muted" style="display:none;"></p>
+		{% endif %}
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+(function() {
+	var btn = document.getElementById("accept-quote-btn");
+	if (!btn) return;
+	btn.addEventListener("click", function() {
+		if (!confirm("{{ _("Accept this quote?") }}")) return;
+		btn.disabled = true;
+		var doctype = "{{ doctype | e }}";
+		var name = "{{ name | e }}";
+		var key = "{{ key | e }}";
+		fetch("/api/method/erpnext_xact_qfinishes_app.construction.doctype.construction_estimate.construction_estimate.accept_quote", {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: new URLSearchParams({ doctype: doctype, name: name, key: key }),
+			credentials: "same-origin"
+		}).then(function(r) { return r.json(); }).then(function(res) {
+			var msg = document.getElementById("accept-message");
+			msg.style.display = "block";
+			if (res.exc) {
+				msg.className = "mt-2 small text-danger";
+				msg.textContent = res._server_messages ? JSON.parse(res._server_messages).join(" ") : "Error";
+				btn.disabled = false;
+			} else {
+				msg.className = "mt-2 small text-success";
+				msg.textContent = "{{ _("Quote accepted. Thank you.") }}";
+				btn.style.display = "none";
+			}
+		}).catch(function() {
+			document.getElementById("accept-message").style.display = "block";
+			document.getElementById("accept-message").className = "mt-2 small text-danger";
+			document.getElementById("accept-message").textContent = "Request failed.";
+			btn.disabled = false;
+		});
+	});
+})();
+</script>
+{% endblock %}

@@ -10,14 +10,20 @@ app_license = "mit"
 
 required_apps = ["erpnext"]
 
+# Portal: show "My Jobs" in sidebar and send Customer role to My Jobs after login
+portal_menu_items = [
+	{"title": "My Jobs", "route": "/my_jobs", "role": "Customer"},
+]
+role_home_page = {"Customer": "my_jobs"}
+
 # Show this app on the "Select an app to continue" dashboard
 add_to_apps_screen = [
 	{
 		"name": "erpnext_xact_qfinishes_app",
 		"logo": "/assets/erpnext_xact_qfinishes_app/images/qfinishes-buildxact-icon.png",
-		"title": "Construction (Buildxact)",
+		"title": "Construction",
 		"route": "/app/construction",
-		"description": "Estimates, assemblies, cost codes, variations.",
+		"description": "Leads, takeoffs, estimating, job management, cost tracking and invoicing.",
 	}
 ]
 

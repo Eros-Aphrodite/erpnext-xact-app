@@ -1,0 +1,33 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-02-28 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "title",
+  "category",
+  "file"
+ ],
+ "fields": [
+  {"default": "JDOC-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "JDOC-.YYYY.-", "hidden": 1},
+  {"fieldname": "project", "fieldtype": "Link", "label": "Project", "options": "Project", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "title", "fieldtype": "Data", "label": "Title", "in_list_view": 1, "description": "Short description (e.g. Site plan, Photo week 1)."},
+  {"fieldname": "category", "fieldtype": "Select", "label": "Category", "options": "Drawing\nPhoto\nSpec\nOther", "default": "Other", "in_list_view": 1},
+  {"fieldname": "file", "fieldtype": "Attach", "label": "File", "reqd": 1, "in_list_view": 1}
+ ],
+ "modified": "2026-02-28 00:00:00.000000",
+ "module": "Construction",
+ "name": "Job Document",
+ "naming_series": "JDOC-.YYYY.-",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

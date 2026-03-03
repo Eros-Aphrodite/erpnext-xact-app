@@ -10,6 +10,7 @@
   "cost_code",
   "assembly_template",
   "item",
+  "preferred_supplier",
   "description",
   "length",
   "width",
@@ -48,6 +49,13 @@
    "label": "Item",
    "options": "Item",
    "in_list_view": 1
+  },
+  {
+   "fieldname": "preferred_supplier",
+   "fieldtype": "Link",
+   "label": "Preferred Supplier",
+   "options": "Supplier",
+   "description": "Used when creating POs by supplier. Leave blank to use Item default."
   },
   {
    "fieldname": "description",

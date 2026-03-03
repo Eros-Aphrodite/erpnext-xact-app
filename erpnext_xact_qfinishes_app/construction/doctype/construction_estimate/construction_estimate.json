@@ -9,7 +9,20 @@
  "field_order": [
   "naming_series", "customer", "project", "title", "transaction_date", "company", "currency",
   "status", "items_section", "items", "totals_section", "total_qty", "total_amount",
-  "quotation_ref"
+  "quotation_ref",
+  "material_request_ref",
+  "sales_order_ref",
+  "billing_stages_section",
+  "billing_stages",
+  "retention_section",
+  "retention_percent",
+  "retention_release_invoice",
+  "total_retention_held",
+  "retention_released_amount",
+  "quote_section",
+  "quote_sent_at",
+  "quote_viewed_at",
+  "quote_accepted_at"
  ],
  "fields": [
   {"default": "EST-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "EST-.YYYY.-"},
@@ -25,7 +38,20 @@
   {"fieldname": "totals_section", "fieldtype": "Section Break", "label": "Totals"},
   {"fieldname": "total_qty", "fieldtype": "Float", "label": "Total Quantity", "read_only": 1},
   {"fieldname": "total_amount", "fieldtype": "Currency", "label": "Total Amount", "read_only": 1},
-  {"fieldname": "quotation_ref", "fieldtype": "Link", "label": "Quotation", "options": "Quotation", "read_only": 1}
+  {"fieldname": "quotation_ref", "fieldtype": "Link", "label": "Quotation", "options": "Quotation", "read_only": 1},
+  {"fieldname": "material_request_ref", "fieldtype": "Link", "label": "Material Request", "options": "Material Request", "read_only": 1},
+  {"fieldname": "sales_order_ref", "fieldtype": "Link", "label": "Sales Order", "options": "Sales Order", "description": "Link the won contract for progress billing."},
+  {"fieldname": "billing_stages_section", "fieldtype": "Section Break", "label": "Progress Billing Stages"},
+  {"fieldname": "billing_stages", "fieldtype": "Table", "label": "Billing Stages", "options": "Billing Stage"},
+  {"fieldname": "retention_section", "fieldtype": "Section Break", "label": "Retention"},
+  {"fieldname": "retention_percent", "fieldtype": "Percent", "label": "Retention %", "default": 0, "description": "Percent of each progress claim held until release (e.g. 5)."},
+  {"fieldname": "retention_release_invoice", "fieldtype": "Link", "label": "Retention Release Invoice", "options": "Sales Invoice", "read_only": 1},
+  {"fieldname": "total_retention_held", "fieldtype": "Currency", "label": "Total Retention Held", "read_only": 1, "description": "Use Refresh to update."},
+  {"fieldname": "retention_released_amount", "fieldtype": "Currency", "label": "Retention Released", "read_only": 1},
+  {"fieldname": "quote_section", "fieldtype": "Section Break", "label": "Quote to client"},
+  {"fieldname": "quote_sent_at", "fieldtype": "Datetime", "label": "Quote sent at", "read_only": 1},
+  {"fieldname": "quote_viewed_at", "fieldtype": "Datetime", "label": "Quote viewed at", "read_only": 1},
+  {"fieldname": "quote_accepted_at", "fieldtype": "Datetime", "label": "Quote accepted at", "read_only": 1}
  ],
  "modified": "2026-02-28 00:00:00.000000",
  "module": "Construction",

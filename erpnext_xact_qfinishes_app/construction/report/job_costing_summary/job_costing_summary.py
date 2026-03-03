@@ -64,6 +64,12 @@ def get_columns():
 			"width": 140,
 		},
 		{
+			"label": _("Actual (Job Expense)"),
+			"fieldname": "actual_job_expense",
+			"fieldtype": "Currency",
+			"width": 150,
+		},
+		{
 			"label": _("Actual (Total)"),
 			"fieldname": "actual_total",
 			"fieldtype": "Currency",
@@ -85,17 +91,22 @@ def get_data(filters):
 
 	estimated_by_cc = get_estimated_by_cost_code(project, from_date, to_date)
 	variations_by_cc = get_variations_by_cost_code(project, from_date, to_date)
+	committed_by_cc = get_committed_po_by_cost_code(project, from_date, to_date)
+	actual_purchase_by_cc = get_actual_purchase_by_cost_code(project, from_date, to_date)
+	actual_labour_by_cc = get_actual_labour_by_cost_code(project, from_date, to_date)
+	actual_job_expense_by_cc = get_job_expense_by_cost_code(project, from_date, to_date)
 
-	# These are project-level totals (ERPNext PO/PI/Timesheet lines do not carry Cost Code)
-	committed = get_committed_po_total(project, from_date, to_date)
-	actual_purchase = get_actual_purchase_total(project, from_date, to_date)
-	actual_labour = get_actual_labour_total(project, from_date, to_date)
-	actual_total = flt(actual_purchase) + flt(actual_labour)
-
-	cost_codes = set(estimated_by_cc) | set(variations_by_cc)
 	rows = []
+	all_cost_codes = (
+		set(estimated_by_cc)
+		| set(variations_by_cc)
+		| set(committed_by_cc)
+		| set(actual_purchase_by_cc)
+		| set(actual_labour_by_cc)
+		| set(actual_job_expense_by_cc)
+	)
 
-	for cc in sorted(cost_codes, key=lambda x: (x is None, x or "")):
+	for cc in sorted(all_cost_codes, key=lambda x: (x is None, x or "")):
 		trade = None
 		if cc:
 			trade = frappe.db.get_value("Cost Code", cc, "trade")
@@ -103,6 +114,12 @@ def get_data(filters):
 		estimated = flt(estimated_by_cc.get(cc))
 		variations = flt(variations_by_cc.get(cc))
 		budget = estimated + variations
+		committed = flt(committed_by_cc.get(cc))
+		actual_purchase = flt(actual_purchase_by_cc.get(cc))
+		actual_labour = flt(actual_labour_by_cc.get(cc))
+		actual_job_expense = flt(actual_job_expense_by_cc.get(cc))
+		actual_total = actual_purchase + actual_labour + actual_job_expense
+		variance = budget - actual_total if budget or actual_total else 0
 
 		rows.append(
 			{
@@ -111,18 +128,24 @@ def get_data(filters):
 				"estimated": estimated,
 				"variations": variations,
 				"budget": budget,
-				"committed": None,
-				"actual_purchase": None,
-				"actual_labour": None,
-				"actual_total": None,
-				"variance": None,
+				"committed": committed,
+				"actual_purchase": actual_purchase,
+				"actual_labour": actual_labour,
+				"actual_job_expense": actual_job_expense,
+				"actual_total": actual_total,
+				"variance": variance,
 			}
 		)
 
-	# Totals row (shows committed/actual at project level)
+	# Totals row across all cost codes
 	total_estimated = sum(flt(v) for v in estimated_by_cc.values())
 	total_variations = sum(flt(v) for v in variations_by_cc.values())
 	total_budget = total_estimated + total_variations
+	total_committed = sum(flt(v) for v in committed_by_cc.values())
+	total_actual_purchase = sum(flt(v) for v in actual_purchase_by_cc.values())
+	total_actual_labour = sum(flt(v) for v in actual_labour_by_cc.values())
+	total_actual_job_expense = sum(flt(v) for v in actual_job_expense_by_cc.values())
+	total_actual = total_actual_purchase + total_actual_labour + total_actual_job_expense
 
 	rows.append({})
 	rows.append(
@@ -132,41 +155,33 @@ def get_data(filters):
 			"estimated": total_estimated,
 			"variations": total_variations,
 			"budget": total_budget,
-			"committed": committed,
-			"actual_purchase": actual_purchase,
-			"actual_labour": actual_labour,
-			"actual_total": actual_total,
-			"variance": flt(total_budget) - flt(actual_total),
-		}
-	)
-
-	rows.append(
-		{
-			"cost_code": "",
-			"trade": _("Committed/Actual are project totals (no cost-code split yet)."),
-			"estimated": None,
-			"variations": None,
-			"budget": None,
-			"committed": None,
-			"actual_purchase": None,
-			"actual_labour": None,
-			"actual_total": None,
-			"variance": None,
+			"committed": total_committed,
+			"actual_purchase": total_actual_purchase,
+			"actual_labour": total_actual_labour,
+			"actual_job_expense": total_actual_job_expense,
+			"actual_total": total_actual,
+			"variance": total_budget - total_actual,
 		}
 	)
 
 	return rows
 
 
+def base_date_conditions(field, from_date, to_date, params):
+	conditions = []
+	if from_date:
+		conditions.append(f"{field} >= %(from_date)s")
+		params["from_date"] = getdate(from_date)
+	if to_date:
+		conditions.append(f"{field} <= %(to_date)s")
+		params["to_date"] = getdate(to_date)
+	return conditions
+
+
 def get_estimated_by_cost_code(project, from_date=None, to_date=None):
 	conditions = ["ce.project = %(project)s"]
 	params = {"project": project}
-	if from_date:
-		conditions.append("ce.transaction_date >= %(from_date)s")
-		params["from_date"] = getdate(from_date)
-	if to_date:
-		conditions.append("ce.transaction_date <= %(to_date)s")
-		params["to_date"] = getdate(to_date)
+	conditions.extend(base_date_conditions("ce.transaction_date", from_date, to_date, params))
 
 	where = " and ".join(conditions)
 	rows = frappe.db.sql(
@@ -188,12 +203,7 @@ def get_estimated_by_cost_code(project, from_date=None, to_date=None):
 def get_variations_by_cost_code(project, from_date=None, to_date=None):
 	conditions = ["v.project = %(project)s", "v.status = 'Approved'"]
 	params = {"project": project}
-	if from_date:
-		conditions.append("v.transaction_date >= %(from_date)s")
-		params["from_date"] = getdate(from_date)
-	if to_date:
-		conditions.append("v.transaction_date <= %(to_date)s")
-		params["to_date"] = getdate(to_date)
+	conditions.extend(base_date_conditions("v.transaction_date", from_date, to_date, params))
 
 	where = " and ".join(conditions)
 	rows = frappe.db.sql(
@@ -212,80 +222,93 @@ def get_variations_by_cost_code(project, from_date=None, to_date=None):
 	return {r.cost_code: flt(r.amount) for r in rows}
 
 
-def get_committed_po_total(project, from_date=None, to_date=None):
+def get_committed_po_by_cost_code(project, from_date=None, to_date=None):
 	conditions = ["poi.project = %(project)s", "po.docstatus = 1"]
 	params = {"project": project}
-	if from_date:
-		conditions.append("po.transaction_date >= %(from_date)s")
-		params["from_date"] = getdate(from_date)
-	if to_date:
-		conditions.append("po.transaction_date <= %(to_date)s")
-		params["to_date"] = getdate(to_date)
+	conditions.extend(base_date_conditions("po.transaction_date", from_date, to_date, params))
 
 	where = " and ".join(conditions)
-	res = frappe.db.sql(
+	rows = frappe.db.sql(
 		f"""
 		select
+			poi.cost_code as cost_code,
 			sum(
 				coalesce(poi.base_net_amount, poi.base_amount, poi.net_amount, poi.amount, 0)
 			) as total
 		from `tabPurchase Order Item` poi
 		inner join `tabPurchase Order` po on po.name = poi.parent
 		where {where}
+		group by poi.cost_code
 		""",
 		params,
 		as_dict=True,
 	)
-	return flt(res[0].total) if res else 0
+	return {r.cost_code: flt(r.total) for r in rows}
 
 
-def get_actual_purchase_total(project, from_date=None, to_date=None):
+def get_actual_purchase_by_cost_code(project, from_date=None, to_date=None):
 	conditions = ["pii.project = %(project)s", "pi.docstatus = 1"]
 	params = {"project": project}
-	if from_date:
-		conditions.append("pi.posting_date >= %(from_date)s")
-		params["from_date"] = getdate(from_date)
-	if to_date:
-		conditions.append("pi.posting_date <= %(to_date)s")
-		params["to_date"] = getdate(to_date)
+	conditions.extend(base_date_conditions("pi.posting_date", from_date, to_date, params))
 
 	where = " and ".join(conditions)
-	res = frappe.db.sql(
+	rows = frappe.db.sql(
 		f"""
 		select
+			pii.cost_code as cost_code,
 			sum(
 				coalesce(pii.base_net_amount, pii.base_amount, pii.net_amount, pii.amount, 0)
 			) as total
 		from `tabPurchase Invoice Item` pii
 		inner join `tabPurchase Invoice` pi on pi.name = pii.parent
 		where {where}
+		group by pii.cost_code
 		""",
 		params,
 		as_dict=True,
 	)
-	return flt(res[0].total) if res else 0
+	return {r.cost_code: flt(r.total) for r in rows}
 
 
-def get_actual_labour_total(project, from_date=None, to_date=None):
+def get_actual_labour_by_cost_code(project, from_date=None, to_date=None):
 	conditions = ["tdd.project = %(project)s", "ts.docstatus = 1"]
 	params = {"project": project}
-	if from_date:
-		conditions.append("date(tdd.from_time) >= %(from_date)s")
-		params["from_date"] = getdate(from_date)
-	if to_date:
-		conditions.append("date(tdd.from_time) <= %(to_date)s")
-		params["to_date"] = getdate(to_date)
+	# Timesheet Detail doesn't have a separate posting date; use from_time
+	conditions.extend(base_date_conditions("date(tdd.from_time)", from_date, to_date, params))
 
 	where = " and ".join(conditions)
-	res = frappe.db.sql(
+	rows = frappe.db.sql(
 		f"""
 		select
+			tdd.cost_code as cost_code,
 			sum(coalesce(tdd.base_costing_amount, tdd.costing_amount, 0)) as total
 		from `tabTimesheet Detail` tdd
 		inner join `tabTimesheet` ts on ts.name = tdd.parent
 		where {where}
+		group by tdd.cost_code
 		""",
 		params,
 		as_dict=True,
 	)
-	return flt(res[0].total) if res else 0
+	return {r.cost_code: flt(r.total) for r in rows}
+
+
+def get_job_expense_by_cost_code(project, from_date=None, to_date=None):
+	conditions = ["je.project = %(project)s"]
+	params = {"project": project}
+	conditions.extend(base_date_conditions("je.posting_date", from_date, to_date, params))
+
+	where = " and ".join(conditions)
+	rows = frappe.db.sql(
+		f"""
+		select
+			je.cost_code as cost_code,
+			sum(coalesce(je.amount, 0)) as total
+		from `tabJob Expense` je
+		where {where}
+		group by je.cost_code
+		""",
+		params,
+		as_dict=True,
+	)
+	return {r.cost_code: flt(r.total) for r in rows}

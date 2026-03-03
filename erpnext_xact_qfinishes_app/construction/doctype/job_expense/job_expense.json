@@ -1,0 +1,44 @@
+{
+ "actions": [],
+ "allow_rename": 0,
+ "autoname": "naming_series:",
+ "creation": "2026-03-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 0,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "project",
+  "cost_code",
+  "posting_date",
+  "amount",
+  "section_party",
+  "supplier",
+  "employee",
+  "receipt",
+  "notes"
+ ],
+ "fields": [
+  {"default": "JEXP-.YYYY.-", "fieldname": "naming_series", "fieldtype": "Select", "label": "Series", "options": "JEXP-.YYYY.-", "hidden": 1},
+  {"fieldname": "project", "fieldtype": "Link", "label": "Project", "options": "Project", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "cost_code", "fieldtype": "Link", "label": "Cost Code", "options": "Cost Code", "in_list_view": 1},
+  {"default": "Today", "fieldname": "posting_date", "fieldtype": "Date", "label": "Date", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "amount", "fieldtype": "Currency", "label": "Amount", "reqd": 1, "in_list_view": 1},
+  {"fieldname": "section_party", "fieldtype": "Section Break", "label": "Party"},
+  {"fieldname": "supplier", "fieldtype": "Link", "label": "Supplier", "options": "Supplier"},
+  {"fieldname": "employee", "fieldtype": "Link", "label": "Employee", "options": "Employee"},
+  {"fieldname": "receipt", "fieldtype": "Attach Image", "label": "Receipt Photo / File"},
+  {"fieldname": "notes", "fieldtype": "Small Text", "label": "Notes"}
+ ],
+ "modified": "2026-03-01 00:00:00.000000",
+ "module": "Construction",
+ "name": "Job Expense",
+ "naming_series": "JEXP-.YYYY.-",
+ "owner": "Administrator",
+ "permissions": [
+  {"create": 1, "delete": 1, "email": 1, "export": 1, "print": 1, "read": 1, "report": 1, "role": "System Manager", "share": 1, "write": 1}
+ ],
+ "sort_field": "posting_date",
+ "sort_order": "DESC"
+}
+
